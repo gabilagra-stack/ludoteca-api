@@ -34,6 +34,10 @@ dependencies {
 
 	//flayway
 	implementation 'org.flywaydb:flyway-core:9.22.3'
+
+	// Lombok
+	compileOnly 'org.projectlombok:lombok:1.18.30'
+	annotationProcessor 'org.projectlombok:lombok:1.18.38'
 }
 
 tasks.named('test') {

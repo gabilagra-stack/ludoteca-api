@@ -26,6 +26,7 @@ CREATE TABLE turno_horario (
 CREATE TABLE turno_dia (
                            id SERIAL PRIMARY KEY,
                            fecha DATE NOT NULL,
+                           dia_semana VARCHAR(10),
                            turno_horario_id INT NOT NULL,
                            FOREIGN KEY (turno_horario_id) REFERENCES turno_horario(id)
 );
