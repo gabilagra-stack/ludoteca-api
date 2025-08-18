@@ -23,6 +23,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
 
 	//postgre
 	runtimeOnly 'org.postgresql:postgresql'

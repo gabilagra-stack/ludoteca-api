@@ -3,7 +3,7 @@ package com.ludoteca.api.dto.request;
 import lombok.Data;
 
 @Data
-public class JuegoParaJugarRequest {
+public class JuegoParaJugarRequestDto {
     private String nombre;
     private String descripcion;
     private Integer cantidadDisponible;
