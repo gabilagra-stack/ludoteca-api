@@ -2,6 +2,7 @@ package com.ludoteca.api.controller;
 
 import com.ludoteca.api.dto.request.MesaRequestDto;
 import com.ludoteca.api.dto.response.MesaResponseDto;
+import com.ludoteca.api.service.MesaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

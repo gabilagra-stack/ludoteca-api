@@ -4,6 +4,8 @@ import com.ludoteca.api.dto.request.TurnoDiaRequestDto;
 import com.ludoteca.api.dto.request.TurnoHorarioRequestDto;
 import com.ludoteca.api.dto.response.TurnoDiaResponseDto;
 import com.ludoteca.api.dto.response.TurnoHorarioResponseDto;
+import com.ludoteca.api.service.TurnoDiaService;
+import com.ludoteca.api.service.TurnoHorarioService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -22,12 +24,13 @@ import java.util.List;
 @Validated
 public class TurnoController {
 
-    private final TurnoService turnoService;
+    private final TurnoHorarioService turnoHorarioService;
+    private final TurnoDiaService turnoDiaService;
 
     //  Obtener todos los turnos horarios
     @GetMapping("/horarios")
     public ResponseEntity<List<TurnoHorarioResponseDto>> obtenerHorarios() {
-        return ResponseEntity.ok(turnoService.obtenerTurnosHorarios());
+        return ResponseEntity.ok(turnoHorarioService.listarTodos());
     }
 
     // Crear un nuevo turno horario (solo ADMIN)
@@ -35,7 +38,7 @@ public class TurnoController {
     @PostMapping("/horarios")
     public ResponseEntity<TurnoHorarioResponseDto> crearTurnoHorario(
             @Valid @RequestBody TurnoHorarioRequestDto dto) {
-        TurnoHorarioResponseDto response = turnoService.crearTurnoHorario(dto);
+        TurnoHorarioResponseDto response = turnoHorarioService.crearTurnoHorario(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -43,7 +46,7 @@ public class TurnoController {
     @GetMapping("/dias")
     public ResponseEntity<List<TurnoDiaResponseDto>> obtenerTurnosDia(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha) {
-        return ResponseEntity.ok(turnoService.obtenerTurnosPorFecha(fecha));
+        return ResponseEntity.ok(turnoHorarioService.obtenerTurnosPorFecha(fecha));
     }
 
     //  Crear turno concreto en un día (ADMIN)
@@ -51,7 +54,7 @@ public class TurnoController {
     @PostMapping("/dias")
     public ResponseEntity<TurnoDiaResponseDto> crearTurnoDia(
             @Valid @RequestBody TurnoDiaRequestDto dto) {
-        TurnoDiaResponseDto response = turnoService.crearTurnoDia(dto);
+        TurnoDiaResponseDto response = turnoDiaService.crear(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -59,7 +62,7 @@ public class TurnoController {
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/horarios/{id}")
     public ResponseEntity<Void> eliminarTurnoHorario(@PathVariable final Long id) {
-        turnoService.eliminarTurnoHorario(id);
+        turnoHorarioService.eliminar(id);
         return ResponseEntity.noContent().build();
     }
 
@@ -67,7 +70,7 @@ public class TurnoController {
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/dias/{id}")
     public ResponseEntity<Void> eliminarTurnoDia(@PathVariable final Long id) {
-        turnoService.eliminarTurnoDia(id);
+        turnoDiaService.eliminar(id);
         return ResponseEntity.noContent().build();
     }
 }

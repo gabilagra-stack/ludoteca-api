@@ -1,9 +1,11 @@
 package com.ludoteca.api.dto.response;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
-public class UsuarioDto {
+@Builder
+public class UsuarioResponseDto {
     private Long id;
     private String nombre;
     private String email;
