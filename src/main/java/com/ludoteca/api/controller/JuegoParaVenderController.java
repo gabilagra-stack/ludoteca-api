@@ -2,6 +2,7 @@ package com.ludoteca.api.controller;
 
 import com.ludoteca.api.dto.request.JuegoParaVenderRequestDto;
 import com.ludoteca.api.dto.response.JuegoParaVenderResponseDto;
+import com.ludoteca.api.service.JuegoParaVenderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

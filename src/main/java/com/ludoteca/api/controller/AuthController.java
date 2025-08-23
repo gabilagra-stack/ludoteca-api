@@ -2,7 +2,8 @@ package com.ludoteca.api.controller;
 
 
 import com.ludoteca.api.dto.request.LoginRequestDto;
-import com.ludoteca.api.dto.response.UsuarioDto;
+import com.ludoteca.api.dto.response.UsuarioResponseDto;
+import com.ludoteca.api.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,10 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
+    private final AuthService authService
 
     @PostMapping("/login")
-    public ResponseEntity<UsuarioDto> login(@RequestBody final LoginRequestDto request) {
-        UsuarioDto usuarioAutenticado = usuarioService.login(request);
+    public ResponseEntity<UsuarioResponseDto> login(@RequestBody final LoginRequestDto request) {
+        UsuarioResponseDto usuarioAutenticado = authService.login(request);
         return ResponseEntity.ok(usuarioAutenticado);
     }
 }
