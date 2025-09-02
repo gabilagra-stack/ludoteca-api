@@ -2,6 +2,7 @@ package com.ludoteca.api.controller;
 
 import com.ludoteca.api.dto.request.JuegoParaJugarRequestDto;
 import com.ludoteca.api.dto.response.JuegoParaJugarResponseDto;
+import com.ludoteca.api.enums.Dificultad;
 import com.ludoteca.api.service.JuegosParaJugarService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,14 +23,13 @@ public class JuegoParaJugarController {
     // Listar todos los juegos para jugar
     @GetMapping
     public ResponseEntity<List<JuegoParaJugarResponseDto>> buscarJuegos(
-            @RequestParam(required = false) String nombre,
-            @RequestParam(required = false) String categoria,
-            @RequestParam(required = false) String dificultad,
-            @RequestParam(required = false) Integer jugadoresMin,
-            @RequestParam(required = false) Integer jugadoresMax
+            @RequestParam(name = "nombre", required = false) final String nombre,
+            @RequestParam(name = "categoria", required = false) final String categoria,
+            @RequestParam(name = "dificultad", required = false) final String dificultad,
+            @RequestParam(name = "jugadoresMax", required = false) final Integer jugadoresMax
     ) {
         List<JuegoParaJugarResponseDto> juegos = juegoParaJugarService.buscarPorFiltros(nombre, categoria,
-                jugadoresMin, jugadoresMax, dificultad);
+                jugadoresMax, dificultad);
         return ResponseEntity.ok(juegos);
     }
 

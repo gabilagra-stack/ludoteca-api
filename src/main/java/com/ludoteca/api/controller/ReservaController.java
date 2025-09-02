@@ -4,6 +4,7 @@ import com.ludoteca.api.dto.request.ReservaRequestDto;
 import com.ludoteca.api.dto.response.ReservaResponseDto;
 import com.ludoteca.api.model.Usuario;
 import com.ludoteca.api.service.ReservaService;
+import com.ludoteca.api.utils.UsuarioPrincipal;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -23,13 +25,13 @@ public class ReservaController {
     // Crear una nueva reserva
     @PostMapping
     public ResponseEntity<ReservaResponseDto> crearReserva(@RequestBody @Valid ReservaRequestDto request,
-                                                           @AuthenticationPrincipal final Usuario usuario) {
-        ReservaResponseDto response = reservaService.crearReserva(request, usuario);
+                                                           @AuthenticationPrincipal final UsuarioPrincipal usuarioPrincipal) {
+        ReservaResponseDto response = reservaService.crearReserva(request, usuarioPrincipal);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     // Cancelar una reserva
-    @PreAuthorize("hasRole('ADMIN') or @reservaSecurityService.esDueñoDeReserva(#id, authentication)")
+    @PreAuthorize("hasRole('ADMIN') or @reservaSecurityService.esDuenoDeReserva(#id, authentication)")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> cancelarReserva(@PathVariable final Long id) {
         reservaService.cancelarReserva(id);
@@ -38,16 +40,19 @@ public class ReservaController {
 
     // Obtener reservas del usuario actual
     @GetMapping("/mis-reservas")
-    public ResponseEntity<List<ReservaResponseDto>> obtenerMisReservas(@AuthenticationPrincipal final Usuario usuario) {
-        List<ReservaResponseDto> reservas = reservaService.obtenerReservasDelUsuario(usuario);
+    public ResponseEntity<List<ReservaResponseDto>> obtenerMisReservas(@AuthenticationPrincipal final UsuarioPrincipal usuarioPrincipal) {
+        List<ReservaResponseDto> reservas = reservaService.listarMisReservas(usuarioPrincipal);
         return ResponseEntity.ok(reservas);
     }
 
     // Obtener todas las reservas (admin)
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
-    public ResponseEntity<List<ReservaResponseDto>> obtenerTodasLasReservas() {
-        List<ReservaResponseDto> reservas = reservaService.obtenerTodasLasReservas();
-        return ResponseEntity.ok(reservas);
+    public ResponseEntity<List<ReservaResponseDto>> obtenerTodasLasReservas(
+            @RequestParam(name = "nombreUsuario", required = false) final String nombreUsuario,
+            @RequestParam(name = "numeroMesa", required = false) final Integer numeroMesa,
+            @RequestParam(name = "fechaTurno", required = false) final LocalDate fechaTurno,
+            @RequestParam(name = "diaSemana", required = false) final String diaSemana) {
+        return ResponseEntity.ok(reservaService.listarReservas(nombreUsuario, numeroMesa, fechaTurno, diaSemana));
     }
 }

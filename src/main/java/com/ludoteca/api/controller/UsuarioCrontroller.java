@@ -2,6 +2,7 @@ package com.ludoteca.api.controller;
 
 import com.ludoteca.api.dto.request.CrearUsuarioDto;
 import com.ludoteca.api.dto.response.UsuarioResponseDto;
+import com.ludoteca.api.enums.RolUsuario;
 import com.ludoteca.api.model.Usuario;
 import com.ludoteca.api.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ public class UsuarioCrontroller {
     private final UsuarioService usuarioService;
 
     // Registro de usuario
+    @PostMapping
     public ResponseEntity<UsuarioResponseDto> registrarUsuario(@RequestBody final CrearUsuarioDto crearUsuarioDto) {
         UsuarioResponseDto response = usuarioService.registrarUsuario(crearUsuarioDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -36,8 +38,11 @@ public class UsuarioCrontroller {
     // Listar todos los usuarios (solo admin)
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
-    public ResponseEntity<List<UsuarioResponseDto>> listarUsuarios() {
-        return ResponseEntity.ok(usuarioService.listarUsuarios());
+    public ResponseEntity<List<UsuarioResponseDto>> listarUsuariosPorFiltros(
+            @RequestParam(name = "nombre", required = false) final String nombre,
+            @RequestParam(name = "email", required = false) final String email,
+            @RequestParam(name = "rol", required = false) final RolUsuario rolUsuario) {
+        return ResponseEntity.ok(usuarioService.listarUsuarios(nombre, email, rolUsuario));
     }
 
     // Eliminar un usuario por ID (solo admin)

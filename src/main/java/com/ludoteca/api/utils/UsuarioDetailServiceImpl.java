@@ -1,6 +1,7 @@
 package com.ludoteca.api.utils;
 
 import com.ludoteca.api.model.Usuario;
+import com.ludoteca.api.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

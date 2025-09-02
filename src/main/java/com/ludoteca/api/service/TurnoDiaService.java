@@ -1,33 +1,39 @@
 package com.ludoteca.api.service;
 
 import com.ludoteca.api.dto.request.TurnoDiaRequestDto;
+import com.ludoteca.api.dto.response.ReservaResponseDto;
 import com.ludoteca.api.dto.response.TurnoDiaResponseDto;
+import com.ludoteca.api.enums.DiaSemana;
+import com.ludoteca.api.mapper.TurnoDiaMapper;
 import com.ludoteca.api.model.TurnoDia;
+import com.ludoteca.api.model.TurnoHorario;
+import com.ludoteca.api.repository.TurnoDiaRepository;
+import com.ludoteca.api.repository.TurnoHorarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class TurnoDiaService {
 
     private final TurnoDiaRepository turnoDiaRepository;
+    private final TurnoDiaMapper turnoDiaMapper;
+    private final TurnoHorarioRepository turnoHorarioRepository;
 
-    public List<TurnoDiaResponseDto> listar() {
-        return turnoDiaRepository.findAll()
-                .stream()
-                .map(td -> new TurnoDiaResponseDto(td.getId(), td.getNombreDia()))
-                .collect(Collectors.toList());
+    public List<TurnoDiaResponseDto> obtenerTurnosDia(final LocalDate fechaTurno, final DiaSemana diaSemana) {
+        return turnoDiaMapper.toListDto(turnoDiaRepository.busquedaPorFiltros(fechaTurno, diaSemana));
     }
 
     public TurnoDiaResponseDto crear(TurnoDiaRequestDto dto) {
-        TurnoDia turnoDia = TurnoDia.builder()
-                .nombreDia(dto.getNombreDia())
-                .build();
-        TurnoDia guardado = turnoDiaRepository.save(turnoDia);
-        return new TurnoDiaResponseDto(guardado.getId(), guardado.getNombreDia());
+        TurnoDia turnoDia = turnoDiaMapper.toEntity(dto);
+        TurnoHorario turnoHorario = turnoHorarioRepository.findById(dto.getTurnoHorarioId())
+                .orElseThrow(() -> new RuntimeException("Turno de horario no encontrado con id"+dto.getTurnoHorarioId()));
+        turnoDia.setTurnoHorario(turnoHorario);
+        return turnoDiaMapper.toDto(turnoDiaRepository.save(turnoDia));
     }
 
     public void eliminar(Long id) {

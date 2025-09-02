@@ -21,8 +21,10 @@ public class MesaController {
 
     // Obtener todas las mesas
     @GetMapping
-    public ResponseEntity<List<MesaResponseDto>> listarMesas() {
-        return ResponseEntity.ok(mesaService.listarMesas());
+    public ResponseEntity<List<MesaResponseDto>> listarMesasPorFiltros(
+            @RequestParam(name = "numero", required = false) final Integer numero,
+            @RequestParam(name = "capacidad", required = false) final Integer capacidad) {
+        return ResponseEntity.ok(mesaService.listarMesas(numero, capacidad));
     }
 
     // Crear una nueva mesa (ADMIN)

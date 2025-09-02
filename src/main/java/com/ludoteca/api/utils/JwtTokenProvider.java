@@ -37,7 +37,7 @@ public class JwtTokenProvider {
 
         return Jwts.builder()
                 .setSubject(usuario.getEmail())
-                .claim("rol", usuario.getRolUsuario())
+                .claim("rol", usuario.getRol())
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
                 .signWith(key, SignatureAlgorithm.HS256)
@@ -57,7 +57,7 @@ public class JwtTokenProvider {
 
         Usuario usuario = new Usuario();
         usuario.setEmail(email);
-        usuario.setRolUsuario(rolUsuario);
+        usuario.setRol(rolUsuario);
         UsuarioPrincipal usuarioPrincipal = new UsuarioPrincipal(usuario);
 
         return new UsernamePasswordAuthenticationToken(usuarioPrincipal, token, usuarioPrincipal.getAuthorities());

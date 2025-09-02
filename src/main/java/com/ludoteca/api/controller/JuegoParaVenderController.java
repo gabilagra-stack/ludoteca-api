@@ -24,9 +24,12 @@ public class JuegoParaVenderController {
     public ResponseEntity<List<JuegoParaVenderResponseDto>> buscarJuegos(
             @RequestParam(required = false) String nombre,
             @RequestParam(required = false) String categoria,
-            @RequestParam(required = false) String dificultad
+            @RequestParam(required = false) String dificultad,
+            @RequestParam(required = false) Integer jugadoresMax,
+            @RequestParam(required = false) Integer stock
     ) {
-        List<JuegoParaVenderResponseDto> juegos = juegoService.buscar(nombre, categoria, dificultad);
+        List<JuegoParaVenderResponseDto> juegos = juegoParaVenderService.buscarPorFiltros(nombre, categoria,
+                dificultad, jugadoresMax, stock);
         return ResponseEntity.ok(juegos);
     }
 

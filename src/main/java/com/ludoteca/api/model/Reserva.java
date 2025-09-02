@@ -17,7 +17,7 @@ public class Reserva {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private EstadoReserva estadoReserva;
+    private EstadoReserva estado;
 
     @ManyToOne
     @JoinColumn(name = "usuario_id", nullable = false)
@@ -29,6 +29,6 @@ public class Reserva {
 
     @ManyToOne
     @JoinColumn(name = "turno_dia_id", nullable = false)
-    private TurnoDia turno_dia;
+    private TurnoDia turnoDia;
 
 }

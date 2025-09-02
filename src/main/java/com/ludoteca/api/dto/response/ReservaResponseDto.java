@@ -1,7 +1,12 @@
 package com.ludoteca.api.dto.response;
 
-import java.time.LocalDate;
+import jakarta.persistence.Column;
+import lombok.Data;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
+@Data
 public class ReservaResponseDto {
     private Long id;
     private Long usuarioId;
@@ -11,6 +16,7 @@ public class ReservaResponseDto {
     private Long turnoDiaId;
     private String diaSemana;
     private LocalDate fechaTurno;
-    private String horarioTurno;
+    private LocalTime horaInicio;
+    private LocalTime horaFin;
     private String estado;
 }

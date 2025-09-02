@@ -1,5 +1,6 @@
 package com.ludoteca.api.dto.response;
 
+import com.ludoteca.api.enums.Dificultad;
 import lombok.Data;
 
 @Data
