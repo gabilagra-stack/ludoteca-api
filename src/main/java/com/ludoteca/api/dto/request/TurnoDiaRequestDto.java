@@ -1,7 +1,8 @@
 package com.ludoteca.api.dto.request;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import org.antlr.v4.runtime.misc.NotNull;
+
 
 import java.time.LocalDate;
 
@@ -10,6 +11,9 @@ public class TurnoDiaRequestDto {
 
     @NotNull
     private LocalDate fecha;
+
+    @NotNull
+    private String diaSemana;
 
     @NotNull
     private Long turnoHorarioId;

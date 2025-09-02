@@ -1,5 +1,6 @@
 package com.ludoteca.api.dto.request;
 
+import com.ludoteca.api.enums.Dificultad;
 import lombok.Data;
 
 @Data
@@ -9,7 +10,7 @@ public class JuegoParaJugarRequestDto {
     private Integer cantidadDisponible;
     private String imagenUrl;
     private Integer numeroMaximo;
-    private String dificultad;
+    private Dificultad dificultad;
     private String categoria;
     private String duracionAproximada;
 }

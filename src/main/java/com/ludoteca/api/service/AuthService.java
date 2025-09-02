@@ -2,9 +2,14 @@ package com.ludoteca.api.service;
 
 import com.ludoteca.api.dto.request.CrearUsuarioDto;
 import com.ludoteca.api.dto.request.LoginRequestDto;
+import com.ludoteca.api.dto.response.LoginResponseDto;
 import com.ludoteca.api.dto.response.UsuarioResponseDto;
+import com.ludoteca.api.exception.UsuarioYaExisteException;
+import com.ludoteca.api.mapper.UsuarioMapper;
 import com.ludoteca.api.model.Usuario;
+import com.ludoteca.api.repository.UsuarioRepository;
 import com.ludoteca.api.utils.JwtTokenProvider;
+import com.ludoteca.api.utils.UsuarioPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,20 +33,28 @@ public class AuthService {
         }
 
         Usuario usuario = usuarioMapper.toEntity(requestDto);
-        usuario.setPassword(passwordEncoder.encode(requestDto.getContraseña()));
+        usuario.setPassword(passwordEncoder.encode(requestDto.getPassword()));
         usuario = usuarioRepository.save(usuario);
         return usuarioMapper.toDto(usuario);
     }
 
-    public String login(LoginRequestDto loginRequestDto) {
+    public LoginResponseDto login(LoginRequestDto loginRequestDto) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequestDto.getEmail(),
-                        loginRequestDto.getContraseña()
+                        loginRequestDto.getPassword()
                 )
         );
 
-        Usuario usuario = (Usuario) authentication.getPrincipal();
-        return jwtTokenProvider.generarToken(usuario);
+        UsuarioPrincipal principal = (UsuarioPrincipal) authentication.getPrincipal();
+        Usuario usuario = principal.getUsuario();
+        String token = jwtTokenProvider.generarToken(usuario);
+
+        return new LoginResponseDto(
+                token,
+                usuario.getNombre(),
+                usuario.getEmail(),
+                usuario.getRol().name()
+        );
     }
 }

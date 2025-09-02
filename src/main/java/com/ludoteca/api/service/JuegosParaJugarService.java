@@ -2,53 +2,40 @@ package com.ludoteca.api.service;
 
 import com.ludoteca.api.dto.request.JuegoParaJugarRequestDto;
 import com.ludoteca.api.dto.response.JuegoParaJugarResponseDto;
+import com.ludoteca.api.enums.Dificultad;
+import com.ludoteca.api.mapper.JuegoParaJugarMapper;
 import com.ludoteca.api.model.JuegoParaJugar;
+import com.ludoteca.api.repository.JuegoParaJugarRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class JuegosParaJugarService {
 
-    private final JuegoParaJugarRepository juegoRepository;
+    private final JuegoParaJugarRepository juegoParaJugarRepository;
     private final JuegoParaJugarMapper juegoMapper;
 
-    public List<JuegoParaJugarResponseDto> listar() {
-        return juegoRepository.findAll().stream()
-                .map(juegoMapper::toResponseDto)
-                .collect(Collectors.toList());
-    }
-
     @Transactional
-    public JuegoParaJugarResponseDto crear(JuegoParaJugarRequestDto dto) {
+    public JuegoParaJugarResponseDto crear(final JuegoParaJugarRequestDto dto) {
         JuegoParaJugar juego = juegoMapper.toEntity(dto);
-        JuegoParaJugar guardado = juegoRepository.save(juego);
-        return juegoMapper.toResponseDto(guardado);
+        return juegoMapper.toDto(juegoParaJugarRepository.save(juego));
     }
 
     @Transactional
-    public void eliminar(Long id) {
-        JuegoParaJugar juego = juegoRepository.findById(id)
+    public void eliminar(final Long id) {
+        JuegoParaJugar juego = juegoParaJugarRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Juego no encontrado"));
-        juegoRepository.delete(juego);
+        juegoParaJugarRepository.delete(juego);
     }
 
-    public List<JuegoParaJugarResponseDto> buscarPorFiltros(String nombre, String categoria, Integer jugadoresMin, Integer jugadoresMax) {
-        List<JuegoParaJugar> juegos = juegoRepository.findAll().stream()
-                .filter(juego ->
-                        (nombre == null || juego.getNombre().toLowerCase().contains(nombre.toLowerCase())) &&
-                                (categoria == null || juego.getCategoria().equalsIgnoreCase(categoria)) &&
-                                (jugadoresMin == null || juego.getMinimoJugadores() >= jugadoresMin) &&
-                                (jugadoresMax == null || juego.getMaximoJugadores() <= jugadoresMax)
-                )
-                .collect(Collectors.toList());
-
-        return juegos.stream()
-                .map(juegoMapper::toResponseDto)
-                .collect(Collectors.toList());
+    public List<JuegoParaJugarResponseDto> buscarPorFiltros(final String nombre, final String categoria,
+                                                            final Integer jugadoresMax, final String dificultad) {
+        Dificultad dificultadEnum = Dificultad.contieneEnum(dificultad);
+        return juegoMapper.toListDto(juegoParaJugarRepository.busquedaPorFiltros(nombre, categoria, jugadoresMax,
+                dificultadEnum));
     }
 }

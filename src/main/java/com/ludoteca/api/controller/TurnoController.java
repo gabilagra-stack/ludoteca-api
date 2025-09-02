@@ -4,6 +4,7 @@ import com.ludoteca.api.dto.request.TurnoDiaRequestDto;
 import com.ludoteca.api.dto.request.TurnoHorarioRequestDto;
 import com.ludoteca.api.dto.response.TurnoDiaResponseDto;
 import com.ludoteca.api.dto.response.TurnoHorarioResponseDto;
+import com.ludoteca.api.enums.DiaSemana;
 import com.ludoteca.api.service.TurnoDiaService;
 import com.ludoteca.api.service.TurnoHorarioService;
 import jakarta.validation.Valid;
@@ -33,6 +34,15 @@ public class TurnoController {
         return ResponseEntity.ok(turnoHorarioService.listarTodos());
     }
 
+    // Obtener todos los turnos de una fecha
+    @GetMapping("/dias")
+    public ResponseEntity<List<TurnoDiaResponseDto>> obtenerTurnosDia(
+            @RequestParam(name = "fecha", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate fecha,
+            @RequestParam(name = "diaSemana", required = false) final DiaSemana diaSemana) {
+        return ResponseEntity.ok(turnoDiaService.obtenerTurnosDia(fecha, diaSemana));
+    }
+
     // Crear un nuevo turno horario (solo ADMIN)
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/horarios")
@@ -40,13 +50,6 @@ public class TurnoController {
             @Valid @RequestBody TurnoHorarioRequestDto dto) {
         TurnoHorarioResponseDto response = turnoHorarioService.crearTurnoHorario(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
-    }
-
-    // Obtener todos los turnos de una fecha
-    @GetMapping("/dias")
-    public ResponseEntity<List<TurnoDiaResponseDto>> obtenerTurnosDia(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha) {
-        return ResponseEntity.ok(turnoHorarioService.obtenerTurnosPorFecha(fecha));
     }
 
     //  Crear turno concreto en un día (ADMIN)

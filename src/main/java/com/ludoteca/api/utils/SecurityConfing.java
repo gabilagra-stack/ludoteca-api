@@ -35,7 +35,7 @@ public class SecurityConfing {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll() // rutas públicas
+                        .requestMatchers("/auth/**").permitAll() // rutas públicas
                         .requestMatchers(HttpMethod.GET, "/api/juegos/**").permitAll()
                         .anyRequest().authenticated()
                 )
