@@ -2,7 +2,6 @@ package com.ludoteca.api.controller;
 
 import com.ludoteca.api.dto.request.ReservaRequestDto;
 import com.ludoteca.api.dto.response.ReservaResponseDto;
-import com.ludoteca.api.model.Usuario;
 import com.ludoteca.api.service.ReservaService;
 import com.ludoteca.api.utils.UsuarioPrincipal;
 import jakarta.validation.Valid;

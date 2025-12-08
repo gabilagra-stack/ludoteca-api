@@ -2,7 +2,6 @@ package com.ludoteca.api.controller;
 
 import com.ludoteca.api.dto.request.JuegoParaJugarRequestDto;
 import com.ludoteca.api.dto.response.JuegoParaJugarResponseDto;
-import com.ludoteca.api.enums.Dificultad;
 import com.ludoteca.api.service.JuegosParaJugarService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
