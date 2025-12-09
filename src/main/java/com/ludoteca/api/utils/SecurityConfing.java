@@ -43,6 +43,7 @@ public class SecurityConfing {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()     // << preflight
                         .requestMatchers("/api/auth/**").permitAll()                // << login público
+                        .requestMatchers(HttpMethod.POST, "/api/usuarios").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/juegos/**").permitAll()
                         .anyRequest().authenticated()
                 )
