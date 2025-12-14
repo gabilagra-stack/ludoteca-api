@@ -25,7 +25,19 @@ public class TurnoDiaService {
     private final TurnoHorarioRepository turnoHorarioRepository;
 
     public List<TurnoDiaResponseDto> obtenerTurnosDia(final LocalDate fechaTurno, final DiaSemana diaSemana) {
-        return turnoDiaMapper.toListDto(turnoDiaRepository.busquedaPorFiltros(fechaTurno, diaSemana));
+        List<TurnoDia> lista;
+
+        if (fechaTurno != null && diaSemana != null) {
+            lista = turnoDiaRepository.findByFechaAndDiaSemanaOrderByFechaDesc(fechaTurno, diaSemana);
+        } else if (fechaTurno != null) {
+            lista = turnoDiaRepository.findByFechaOrderByFechaDesc(fechaTurno);
+        } else if (diaSemana != null) {
+            lista = turnoDiaRepository.findByDiaSemanaOrderByFechaDesc(diaSemana);
+        } else {
+            lista = turnoDiaRepository.findAllByOrderByFechaDesc();
+        }
+
+        return turnoDiaMapper.toListDto(lista);
     }
 
     public TurnoDiaResponseDto crear(TurnoDiaRequestDto dto) {
@@ -36,7 +48,7 @@ public class TurnoDiaService {
         return turnoDiaMapper.toDto(turnoDiaRepository.save(turnoDia));
     }
 
-    public void eliminar(Long id) {
+    public void eliminar(Integer id) {
         if (!turnoDiaRepository.existsById(id)) {
             throw new RuntimeException("Turno día no encontrado");
         }

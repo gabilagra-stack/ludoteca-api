@@ -72,7 +72,7 @@ public class TurnoController {
     // Eliminar turno día (ADMIN)
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/dias/{id}")
-    public ResponseEntity<Void> eliminarTurnoDia(@PathVariable final Long id) {
+    public ResponseEntity<Void> eliminarTurnoDia(@PathVariable final Integer id) {
         turnoDiaService.eliminar(id);
         return ResponseEntity.noContent().build();
     }

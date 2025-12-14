@@ -1,6 +1,7 @@
 package com.ludoteca.api.controller;
 
 import com.ludoteca.api.dto.request.ReservaRequestDto;
+import com.ludoteca.api.dto.response.DisponibilidadTurnoResponseDto;
 import com.ludoteca.api.dto.response.ReservaResponseDto;
 import com.ludoteca.api.service.ReservaService;
 import com.ludoteca.api.utils.UsuarioPrincipal;
@@ -53,5 +54,13 @@ public class ReservaController {
             @RequestParam(name = "fechaTurno", required = false) final LocalDate fechaTurno,
             @RequestParam(name = "diaSemana", required = false) final String diaSemana) {
         return ResponseEntity.ok(reservaService.listarReservas(nombreUsuario, numeroMesa, fechaTurno, diaSemana));
+    }
+
+    @GetMapping("/disponibilidad")
+    public ResponseEntity<DisponibilidadTurnoResponseDto> obtenerDisponibilidad(
+            @RequestParam("fecha") LocalDate fecha,
+            @RequestParam("turnoDiaId") Integer turnoDiaId
+    ) {
+        return ResponseEntity.ok(reservaService.obtenerDisponibilidad(fecha, turnoDiaId));
     }
 }

@@ -6,5 +6,5 @@ import lombok.Data;
 public class ReservaRequestDto {
     private Long usuarioId;
     private Long mesaId;
-    private Long turnoDiaId;
+    private Integer turnoDiaId;
 }
