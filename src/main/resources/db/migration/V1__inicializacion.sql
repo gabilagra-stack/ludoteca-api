@@ -11,8 +11,7 @@ CREATE TABLE usuario (
 CREATE TABLE mesa (
                       id SERIAL PRIMARY KEY,
                       numero INT NOT NULL UNIQUE,
-                      capacidad INT NOT NULL,
-                      disponible BOOLEAN DEFAULT TRUE
+                      capacidad INT NOT NULL
 );
 
 -- Horarios fijos de turnos (ej: 17–19, 19–21, 21–23)

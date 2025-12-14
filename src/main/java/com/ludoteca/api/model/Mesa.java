@@ -19,7 +19,4 @@ public class Mesa {
 
     @Column(nullable = false)
     private Integer capacidad;
-
-    @Column(nullable = false)
-   private Boolean disponible = true;
 }

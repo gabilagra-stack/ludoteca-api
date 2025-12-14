@@ -1,6 +1,8 @@
 package com.ludoteca.api.service;
 
+import com.ludoteca.api.dto.MesaDisponibilidadDto;
 import com.ludoteca.api.dto.request.ReservaRequestDto;
+import com.ludoteca.api.dto.response.DisponibilidadTurnoResponseDto;
 import com.ludoteca.api.dto.response.ReservaResponseDto;
 import com.ludoteca.api.enums.EstadoReserva;
 import com.ludoteca.api.mapper.ReservaMapper;
@@ -18,8 +20,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -72,5 +77,44 @@ public class ReservaService {
                                                    final LocalDate fechaTurno, final String diaSemana) {
         return reservaMapper.toList(reservaRepository.busquedaPorFiltros(nombreUsuario, numeroMesa, fechaTurno,
                                                                             diaSemana));
+    }
+
+    public DisponibilidadTurnoResponseDto obtenerDisponibilidad(LocalDate fecha, Integer turnoDiaId) {
+
+        TurnoDia turnoDia = turnoDiaRepository.findById(turnoDiaId)
+                .orElseThrow(() -> new RuntimeException("TurnoDia no encontrado: " + turnoDiaId));
+
+        // Validación para tu endpoint: si pasan fecha + turnoDiaId, confirmamos que coincidan
+        if (!turnoDia.getFecha().equals(fecha)) {
+            throw new RuntimeException(
+                    "La fecha enviada (" + fecha + ") no coincide con la fecha del TurnoDia (" + turnoDia.getFecha() + ")"
+            );
+        }
+
+        // Traigo todas las mesas
+        List<Mesa> mesas = mesaRepository.findAll();
+
+        // Traigo reservas del turno y armo set de mesas reservadas
+        List<Reserva> reservas = reservaRepository.findByTurnoDia_Id(turnoDiaId);
+
+        Set<Integer> mesasReservadasIds = reservas.stream()
+                .map(r -> r.getMesa().getId())
+                .collect(Collectors.toSet());
+
+        List<MesaDisponibilidadDto> resultado = mesas.stream()
+                .map(m -> MesaDisponibilidadDto.builder()
+                        .id(m.getId())
+                        .numero(m.getNumero())
+                        .capacidad(m.getCapacidad())
+                        .disponible(!mesasReservadasIds.contains(m.getId()))
+                        .build()
+                )
+                .collect(Collectors.toList());
+
+        return DisponibilidadTurnoResponseDto.builder()
+                .turnoDiaId(turnoDiaId)
+                .fecha(fecha)
+                .mesas(resultado)
+                .build();
     }
 }

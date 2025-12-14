@@ -27,4 +27,6 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
             + "ORDER BY r.turnoDia.fecha DESC")
     List<Reserva> busquedaPorFiltros(String nombreUsuario, Integer numeroMesa, LocalDate fechaTurno, String diaSemana);
 
+    List<Reserva> findByTurnoDia_Id(Integer turnoDiaId);
+
 }
