@@ -4,6 +4,7 @@ import com.ludoteca.api.dto.MesaDisponibilidadDto;
 import com.ludoteca.api.dto.request.ReservaRequestDto;
 import com.ludoteca.api.dto.response.DisponibilidadTurnoResponseDto;
 import com.ludoteca.api.dto.response.ReservaResponseDto;
+import com.ludoteca.api.enums.DiaSemana;
 import com.ludoteca.api.enums.EstadoReserva;
 import com.ludoteca.api.mapper.ReservaMapper;
 import com.ludoteca.api.model.Mesa;
@@ -14,6 +15,7 @@ import com.ludoteca.api.repository.MesaRepository;
 import com.ludoteca.api.repository.ReservaRepository;
 import com.ludoteca.api.repository.TurnoDiaRepository;
 import com.ludoteca.api.repository.UsuarioRepository;
+import com.ludoteca.api.specification.ReservaSpecifications;
 import com.ludoteca.api.utils.UsuarioPrincipal;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -65,7 +67,7 @@ public class ReservaService {
     }
 
     @Transactional
-    public void cancelarReserva(Long idReserva) {
+    public void cancelarReserva(Integer idReserva) {
         Reserva reserva = reservaRepository.findById(idReserva)
                 .orElseThrow(() -> new RuntimeException("Reserva no encontrada"));
 
@@ -74,9 +76,16 @@ public class ReservaService {
     }
 
     public List<ReservaResponseDto> listarReservas(final String nombreUsuario, final Integer numeroMesa,
-                                                   final LocalDate fechaTurno, final String diaSemana) {
-        return reservaMapper.toList(reservaRepository.busquedaPorFiltros(nombreUsuario, numeroMesa, fechaTurno,
-                                                                            diaSemana));
+                                                   final LocalDate fechaTurno, final DiaSemana diaSemana) {
+
+        var spec = ReservaSpecifications.conFiltros(
+                nombreUsuario,
+                numeroMesa,
+                fechaTurno,
+                diaSemana
+        );
+        var reservas = reservaRepository.findAll(spec);
+        return reservaMapper.toList(reservas);
     }
 
     public DisponibilidadTurnoResponseDto obtenerDisponibilidad(LocalDate fecha, Integer turnoDiaId) {

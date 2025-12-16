@@ -17,7 +17,7 @@ public class ReservaSecurityService {
         this.usuarioRepository = usuarioRepository;
     }
 
-    public boolean esDuenoDeReserva(Long id, Authentication authentication) {
+    public boolean esDuenoDeReserva(Integer id, Authentication authentication) {
         // Ajustá según tu UserDetails
         var principal = (UsuarioPrincipal) authentication.getPrincipal();
         Usuario usuario = usuarioRepository.findByEmail(principal.getUsuario().getEmail()).get();
