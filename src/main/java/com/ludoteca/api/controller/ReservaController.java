@@ -3,6 +3,7 @@ package com.ludoteca.api.controller;
 import com.ludoteca.api.dto.request.ReservaRequestDto;
 import com.ludoteca.api.dto.response.DisponibilidadTurnoResponseDto;
 import com.ludoteca.api.dto.response.ReservaResponseDto;
+import com.ludoteca.api.enums.DiaSemana;
 import com.ludoteca.api.service.ReservaService;
 import com.ludoteca.api.utils.UsuarioPrincipal;
 import jakarta.validation.Valid;
@@ -33,7 +34,7 @@ public class ReservaController {
     // Cancelar una reserva
     @PreAuthorize("hasRole('ADMIN') or @reservaSecurityService.esDuenoDeReserva(#id, authentication)")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> cancelarReserva(@PathVariable final Long id) {
+    public ResponseEntity<Void> cancelarReserva(@PathVariable final Integer id) {
         reservaService.cancelarReserva(id);
         return ResponseEntity.noContent().build();
     }
@@ -52,7 +53,7 @@ public class ReservaController {
             @RequestParam(name = "nombreUsuario", required = false) final String nombreUsuario,
             @RequestParam(name = "numeroMesa", required = false) final Integer numeroMesa,
             @RequestParam(name = "fechaTurno", required = false) final LocalDate fechaTurno,
-            @RequestParam(name = "diaSemana", required = false) final String diaSemana) {
+            @RequestParam(name = "diaSemana", required = false) final DiaSemana diaSemana) {
         return ResponseEntity.ok(reservaService.listarReservas(nombreUsuario, numeroMesa, fechaTurno, diaSemana));
     }
 
