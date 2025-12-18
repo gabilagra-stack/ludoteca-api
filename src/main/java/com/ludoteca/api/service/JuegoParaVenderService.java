@@ -1,12 +1,10 @@
 package com.ludoteca.api.service;
 
 
-import com.ludoteca.api.dto.request.JuegoParaJugarRequestDto;
 import com.ludoteca.api.dto.request.JuegoParaVenderRequestDto;
-import com.ludoteca.api.dto.response.JuegoParaJugarResponseDto;
 import com.ludoteca.api.dto.response.JuegoParaVenderResponseDto;
+import com.ludoteca.api.exception.JuegoNoEncontradoException;
 import com.ludoteca.api.mapper.JuegoParaVenderMapper;
-import com.ludoteca.api.model.JuegoParaJugar;
 import com.ludoteca.api.model.JuegoParaVender;
 import com.ludoteca.api.repository.JuegoParaVenderRepository;
 import jakarta.transaction.Transactional;
@@ -31,7 +29,7 @@ public class JuegoParaVenderService {
     @Transactional
     public void eliminarJuego(final Long id) {
         JuegoParaVender juego = juegoParaVenderRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Juego no encontrado"));
+                .orElseThrow(() -> new JuegoNoEncontradoException("Juego no encontrado"));
         juegoParaVenderRepository.delete(juego);
     }
 

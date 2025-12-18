@@ -6,6 +6,7 @@ import com.ludoteca.api.dto.response.DisponibilidadTurnoResponseDto;
 import com.ludoteca.api.dto.response.ReservaResponseDto;
 import com.ludoteca.api.enums.DiaSemana;
 import com.ludoteca.api.enums.EstadoReserva;
+import com.ludoteca.api.exception.*;
 import com.ludoteca.api.mapper.ReservaMapper;
 import com.ludoteca.api.model.Mesa;
 import com.ludoteca.api.model.Reserva;
@@ -22,7 +23,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -46,17 +46,17 @@ public class ReservaService {
     @Transactional
     public ReservaResponseDto crearReserva(ReservaRequestDto dto, UsuarioPrincipal usuarioPrincipal) {
         Mesa mesa = mesaRepository.findById(dto.getMesaId())
-                .orElseThrow(() -> new RuntimeException("Mesa no encontrada"));
+                .orElseThrow(() -> new MesaNoEncontradaException("Mesa no encontrada"));
 
         TurnoDia turnoDia = turnoDiaRepository.findById(dto.getTurnoDiaId())
-                .orElseThrow(() -> new RuntimeException("Turno no encontrado"));
+                .orElseThrow(() -> new TurnoNoEncontradoException("Turno no encontrado"));
 
         if (reservaRepository.existsByMesaAndTurnoDia(mesa, turnoDia)) {
-            throw new RuntimeException("La mesa ya está reservada en ese turno");
+            throw new MesaReservadaException("La mesa ya está reservada en ese turno");
         }
         Optional<Usuario> usuario = usuarioRepository.findByEmail(usuarioPrincipal.getUsuario().getEmail());
         if (!usuario.isPresent()) {
-            throw new RuntimeException("Usuario no encontrado");
+            throw new UsuarioNoEncontradoException("Usuario no encontrado");
         }
         Reserva reserva = new Reserva();
         reserva.setMesa(mesa);
@@ -69,7 +69,7 @@ public class ReservaService {
     @Transactional
     public void cancelarReserva(Integer idReserva) {
         Reserva reserva = reservaRepository.findById(idReserva)
-                .orElseThrow(() -> new RuntimeException("Reserva no encontrada"));
+                .orElseThrow(() -> new ReservaNoEncontradaException("Reserva no encontrada"));
 
         reserva.setEstado(EstadoReserva.CANCELADO);
         reservaRepository.save(reserva);
@@ -91,11 +91,11 @@ public class ReservaService {
     public DisponibilidadTurnoResponseDto obtenerDisponibilidad(LocalDate fecha, Integer turnoDiaId) {
 
         TurnoDia turnoDia = turnoDiaRepository.findById(turnoDiaId)
-                .orElseThrow(() -> new RuntimeException("TurnoDia no encontrado: " + turnoDiaId));
+                .orElseThrow(() -> new TurnoNoEncontradoException("TurnoDia no encontrado: " + turnoDiaId));
 
         // Validación para tu endpoint: si pasan fecha + turnoDiaId, confirmamos que coincidan
         if (!turnoDia.getFecha().equals(fecha)) {
-            throw new RuntimeException(
+            throw new FechaInvalidaException(
                     "La fecha enviada (" + fecha + ") no coincide con la fecha del TurnoDia (" + turnoDia.getFecha() + ")"
             );
         }
