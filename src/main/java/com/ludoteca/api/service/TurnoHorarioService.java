@@ -2,6 +2,7 @@ package com.ludoteca.api.service;
 
 import com.ludoteca.api.dto.request.TurnoHorarioRequestDto;
 import com.ludoteca.api.dto.response.TurnoHorarioResponseDto;
+import com.ludoteca.api.exception.TurnoNoEncontradoException;
 import com.ludoteca.api.mapper.TurnoHorarioMapper;
 import com.ludoteca.api.repository.TurnoHorarioRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,7 @@ public class TurnoHorarioService {
 
     public void eliminar(Long id) {
         if (!turnoHorarioRepository.existsById(id)) {
-            throw new RuntimeException("Turno horario no encontrado");
+            throw new TurnoNoEncontradoException("Turno horario no encontrado");
         }
         turnoHorarioRepository.deleteById(id);
     }

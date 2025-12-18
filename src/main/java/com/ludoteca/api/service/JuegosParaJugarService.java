@@ -3,6 +3,7 @@ package com.ludoteca.api.service;
 import com.ludoteca.api.dto.request.JuegoParaJugarRequestDto;
 import com.ludoteca.api.dto.response.JuegoParaJugarResponseDto;
 import com.ludoteca.api.enums.Dificultad;
+import com.ludoteca.api.exception.JuegoNoEncontradoException;
 import com.ludoteca.api.mapper.JuegoParaJugarMapper;
 import com.ludoteca.api.model.JuegoParaJugar;
 import com.ludoteca.api.repository.JuegoParaJugarRepository;
@@ -28,7 +29,7 @@ public class JuegosParaJugarService {
     @Transactional
     public void eliminar(final Long id) {
         JuegoParaJugar juego = juegoParaJugarRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Juego no encontrado"));
+                .orElseThrow(() ->  new JuegoNoEncontradoException("Juego no encontrado"));
         juegoParaJugarRepository.delete(juego);
     }
 

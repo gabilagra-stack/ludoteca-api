@@ -1,9 +1,9 @@
 package com.ludoteca.api.service;
 
 import com.ludoteca.api.dto.request.TurnoDiaRequestDto;
-import com.ludoteca.api.dto.response.ReservaResponseDto;
 import com.ludoteca.api.dto.response.TurnoDiaResponseDto;
 import com.ludoteca.api.enums.DiaSemana;
+import com.ludoteca.api.exception.TurnoNoEncontradoException;
 import com.ludoteca.api.mapper.TurnoDiaMapper;
 import com.ludoteca.api.model.TurnoDia;
 import com.ludoteca.api.model.TurnoHorario;
@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -43,14 +42,15 @@ public class TurnoDiaService {
     public TurnoDiaResponseDto crear(TurnoDiaRequestDto dto) {
         TurnoDia turnoDia = turnoDiaMapper.toEntity(dto);
         TurnoHorario turnoHorario = turnoHorarioRepository.findById(dto.getTurnoHorarioId())
-                .orElseThrow(() -> new RuntimeException("Turno de horario no encontrado con id"+dto.getTurnoHorarioId()));
+                .orElseThrow(() -> new TurnoNoEncontradoException("Turno de horario no encontrado con id: " +
+                        dto.getTurnoHorarioId()));
         turnoDia.setTurnoHorario(turnoHorario);
         return turnoDiaMapper.toDto(turnoDiaRepository.save(turnoDia));
     }
 
     public void eliminar(Integer id) {
         if (!turnoDiaRepository.existsById(id)) {
-            throw new RuntimeException("Turno día no encontrado");
+            throw new TurnoNoEncontradoException("Turno día no encontrado");
         }
         turnoDiaRepository.deleteById(id);
     }

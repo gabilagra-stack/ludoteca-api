@@ -3,7 +3,7 @@ package com.ludoteca.api.service;
 import com.ludoteca.api.dto.request.CrearUsuarioDto;
 import com.ludoteca.api.dto.response.UsuarioResponseDto;
 import com.ludoteca.api.enums.RolUsuario;
-import com.ludoteca.api.exception.UsuarioNoEncontradoExeption;
+import com.ludoteca.api.exception.UsuarioNoEncontradoException;
 import com.ludoteca.api.mapper.UsuarioMapper;
 import com.ludoteca.api.model.Usuario;
 import com.ludoteca.api.repository.UsuarioRepository;
@@ -39,7 +39,7 @@ public class UsuarioService {
 
     public void eliminarUsuario(final Long id) {
         if (!usuarioRepository.existsById(id)) {
-            throw new UsuarioNoEncontradoExeption(id);
+            throw new UsuarioNoEncontradoException("Usuario no encontrado con el id " + id);
         }
         usuarioRepository.deleteById(id);
     }
