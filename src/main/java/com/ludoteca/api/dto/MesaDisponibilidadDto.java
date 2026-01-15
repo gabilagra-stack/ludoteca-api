@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MesaDisponibilidadDto {
-    private Integer id;
+    private Long id;
     private Integer numero;
     private Integer capacidad;
     private Boolean disponible;

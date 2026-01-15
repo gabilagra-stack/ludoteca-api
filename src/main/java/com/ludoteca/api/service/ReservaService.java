@@ -106,7 +106,7 @@ public class ReservaService {
         // Traigo reservas del turno y armo set de mesas reservadas
         List<Reserva> reservas = reservaRepository.findByTurnoDia_Id(turnoDiaId);
 
-        Set<Integer> mesasReservadasIds = reservas.stream()
+        Set<Long> mesasReservadasIds = reservas.stream()
                 .map(r -> r.getMesa().getId())
                 .collect(Collectors.toSet());
 

@@ -14,7 +14,7 @@ public class TurnoHorario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @Column(name = "hora_inicio", nullable = false)
     private LocalTime horaInicio;
