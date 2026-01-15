@@ -48,7 +48,7 @@ public class TurnoDiaService {
         return turnoDiaMapper.toDto(turnoDiaRepository.save(turnoDia));
     }
 
-    public void eliminar(Integer id) {
+    public void eliminar(Long id) {
         if (!turnoDiaRepository.existsById(id)) {
             throw new TurnoNoEncontradoException("Turno día no encontrado");
         }

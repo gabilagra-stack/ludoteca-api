@@ -13,7 +13,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.time.LocalDate;
 import java.util.List;
 
-public interface ReservaRepository extends JpaRepository<Reserva, Integer>, JpaSpecificationExecutor<Reserva> {
+public interface ReservaRepository extends JpaRepository<Reserva, Long>, JpaSpecificationExecutor<Reserva> {
 
     List<Reserva> findByUsuarioId(Long usuarioId);
 
@@ -29,6 +29,6 @@ public interface ReservaRepository extends JpaRepository<Reserva, Integer>, JpaS
             + "ORDER BY r.turnoDia.fecha DESC")
     List<Reserva> busquedaPorFiltros(String nombreUsuario, Integer numeroMesa, LocalDate fechaTurno, DiaSemana diaSemana);
 
-    List<Reserva> findByTurnoDia_Id(Integer turnoDiaId);
+    List<Reserva> findByTurnoDia_Id(Long turnoDiaId);
 
 }
