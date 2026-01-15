@@ -35,7 +35,7 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
 	//flayway
-	implementation 'org.flywaydb:flyway-core:9.22.3'
+	implementation 'org.flywaydb:flyway-core'
 
 	// Lombok
 	compileOnly 'org.projectlombok:lombok:1.18.30'
