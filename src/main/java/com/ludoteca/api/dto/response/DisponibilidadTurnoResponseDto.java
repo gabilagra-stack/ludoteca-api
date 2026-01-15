@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 public class DisponibilidadTurnoResponseDto {
-    private Integer turnoDiaId;
+    private Long turnoDiaId;
     private LocalDate fecha;
     private List<MesaDisponibilidadDto> mesas;
 }

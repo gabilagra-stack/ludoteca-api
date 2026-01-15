@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-public interface TurnoDiaRepository extends JpaRepository<TurnoDia, Integer> {
+public interface TurnoDiaRepository extends JpaRepository<TurnoDia, Long> {
 
     List<TurnoDia> findByFecha(LocalDate fecha);
     Optional<TurnoDia> findByFechaAndTurnoHorarioId(LocalDate fecha, Long turnoHorarioId);

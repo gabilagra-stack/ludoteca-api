@@ -67,7 +67,7 @@ public class ReservaService {
     }
 
     @Transactional
-    public void cancelarReserva(Integer idReserva) {
+    public void cancelarReserva(Long idReserva) {
         Reserva reserva = reservaRepository.findById(idReserva)
                 .orElseThrow(() -> new ReservaNoEncontradaException("Reserva no encontrada"));
 
@@ -88,7 +88,7 @@ public class ReservaService {
         return reservaMapper.toList(reservas);
     }
 
-    public DisponibilidadTurnoResponseDto obtenerDisponibilidad(LocalDate fecha, Integer turnoDiaId) {
+    public DisponibilidadTurnoResponseDto obtenerDisponibilidad(LocalDate fecha, Long turnoDiaId) {
 
         TurnoDia turnoDia = turnoDiaRepository.findById(turnoDiaId)
                 .orElseThrow(() -> new TurnoNoEncontradoException("TurnoDia no encontrado: " + turnoDiaId));

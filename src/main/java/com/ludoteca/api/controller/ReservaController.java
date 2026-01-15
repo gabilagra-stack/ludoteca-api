@@ -34,7 +34,7 @@ public class ReservaController {
     // Cancelar una reserva
     @PreAuthorize("hasRole('ADMIN') or @reservaSecurityService.esDuenoDeReserva(#id, authentication)")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> cancelarReserva(@PathVariable final Integer id) {
+    public ResponseEntity<Void> cancelarReserva(@PathVariable final Long id) {
         reservaService.cancelarReserva(id);
         return ResponseEntity.noContent().build();
     }
@@ -60,7 +60,7 @@ public class ReservaController {
     @GetMapping("/disponibilidad")
     public ResponseEntity<DisponibilidadTurnoResponseDto> obtenerDisponibilidad(
             @RequestParam("fecha") LocalDate fecha,
-            @RequestParam("turnoDiaId") Integer turnoDiaId
+            @RequestParam("turnoDiaId") Long turnoDiaId
     ) {
         return ResponseEntity.ok(reservaService.obtenerDisponibilidad(fecha, turnoDiaId));
     }
