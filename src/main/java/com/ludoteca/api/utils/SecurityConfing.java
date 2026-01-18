@@ -75,11 +75,14 @@ public class SecurityConfing {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration cfg = new CorsConfiguration();
         // ⚠️ No uses "*" si allowCredentials(true)
-        cfg.setAllowedOrigins(List.of("http://localhost:5173"));
+        cfg.setAllowedOrigins(List.of(
+                "http://localhost:5173",
+                "https://ludoteca-web-tlif-j7brzjm52-gabilagra-6199s-projects.vercel.app"
+        ));
         cfg.setAllowedMethods(List.of("GET","POST","PUT","DELETE","PATCH","OPTIONS"));
         cfg.setAllowedHeaders(List.of("Authorization","Content-Type","Accept","Origin","X-Requested-With"));
         cfg.setExposedHeaders(List.of("Authorization"));
-        cfg.setAllowCredentials(true);
+        cfg.setAllowCredentials(false);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         // Podés limitar a "/api/**"; para dev, "/**" es práctico
