@@ -70,11 +70,9 @@ public class SecurityConfing {
         return new BCryptPasswordEncoder();
     }
 
-    // ---- CORS global para el front en Vite ----
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration cfg = new CorsConfiguration();
-        // ⚠️ No uses "*" si allowCredentials(true)
         cfg.setAllowedOrigins(List.of(
                 "http://localhost:5173",
                 "https://ludoteca-web-tlif-j7brzjm52-gabilagra-6199s-projects.vercel.app"
@@ -85,7 +83,6 @@ public class SecurityConfing {
         cfg.setAllowCredentials(false);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        // Podés limitar a "/api/**"; para dev, "/**" es práctico
         source.registerCorsConfiguration("/**", cfg);
         return source;
     }
