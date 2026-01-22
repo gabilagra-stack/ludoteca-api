@@ -75,7 +75,8 @@ public class SecurityConfing {
         CorsConfiguration cfg = new CorsConfiguration();
         cfg.setAllowedOrigins(List.of(
                 "http://localhost:5173",
-                "https://ludoteca-web-tlif-j7brzjm52-gabilagra-6199s-projects.vercel.app"
+                "https://ludoteca-web-tlif-j7brzjm52-gabilagra-6199s-projects.vercel.app",
+                "https://ludoteca-web-tlif.vercel.app/juegos-para-jugar"
         ));
         cfg.setAllowedMethods(List.of("GET","POST","PUT","DELETE","PATCH","OPTIONS"));
         cfg.setAllowedHeaders(List.of("Authorization","Content-Type","Accept","Origin","X-Requested-With"));
