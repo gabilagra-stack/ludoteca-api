@@ -6,6 +6,7 @@ import com.ludoteca.api.exception.EventoNoEncontradoException;
 import com.ludoteca.api.mapper.EventoMapper;
 import com.ludoteca.api.model.Evento;
 import com.ludoteca.api.repository.EventoRepository;
+import com.ludoteca.api.specification.EventoSpecifications;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -36,7 +37,7 @@ public class EventoService {
 
     public Page<EventoResponseDto> buscarPorFiltros(final String titulo, final LocalDate fechaDesde,
                                                     final LocalDate fechaHasta, final Pageable pageable) {
-        return eventoRepository.busquedaPorFiltros(titulo, fechaDesde, fechaHasta, pageable)
+        return eventoRepository.findAll(EventoSpecifications.conFiltros(titulo, fechaDesde, fechaHasta), pageable)
                 .map(eventoMapper::toDto);
     }
 
