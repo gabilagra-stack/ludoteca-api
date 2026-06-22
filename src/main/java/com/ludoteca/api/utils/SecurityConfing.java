@@ -45,6 +45,7 @@ public class SecurityConfing {
                         .requestMatchers("/api/auth/**").permitAll()                // << login público
                         .requestMatchers(HttpMethod.POST, "/api/usuarios").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/juegos/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/eventos").permitAll()
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())              // << registra tu provider
