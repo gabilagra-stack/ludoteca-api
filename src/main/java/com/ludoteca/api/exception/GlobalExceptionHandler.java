@@ -61,6 +61,24 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(status).body(body);
     }
 
+    @ExceptionHandler(QueEstaPasandoNoEncontradoException.class)
+    public ResponseEntity<ApiErrorResponse> handleQueEstaPasandoNoEncontradoException(
+            QueEstaPasandoNoEncontradoException ex, HttpServletRequest req) {
+
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        ApiErrorResponse body = base(status, ex.getCode(), ex.getMessage(), req);
+        return ResponseEntity.status(status).body(body);
+    }
+
+    @ExceptionHandler(JuegoDestacadoNoEncontradoException.class)
+    public ResponseEntity<ApiErrorResponse> handleJuegoDestacadoNoEncontradoException(
+            JuegoDestacadoNoEncontradoException ex, HttpServletRequest req) {
+
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        ApiErrorResponse body = base(status, ex.getCode(), ex.getMessage(), req);
+        return ResponseEntity.status(status).body(body);
+    }
+
     @ExceptionHandler(MesaNoEncontradaException.class)
     public ResponseEntity<ApiErrorResponse> handleMesaNoEncontradaException(
             MesaNoEncontradaException ex, HttpServletRequest req) {
